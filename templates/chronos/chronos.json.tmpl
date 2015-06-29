@@ -4,7 +4,7 @@
     \"cpus\": $CPUS,
     \"mem\": $MEM,
     \"shell\": \"false\",
-    \"cmd\": \"/usr/bin/chronos --http_port 8080 --master zk://master0.$CLUSTER_NAME.$ROOT_DOMAIN:2181,master1.$CLUSTER_NAME.$ROOT_DOMAIN:2181,master2.$CLUSTER_NAME.$ROOT_DOMAIN:2181/$CLUSTER_NAME --zk_hosts master0.$CLUSTER_NAME.$ROOT_DOMAIN:2181,master1.$CLUSTER_NAME.$ROOT_DOMAIN:2181,master2.$CLUSTER_NAME.$ROOT_DOMAIN:2181 --cluster_name chronos\",
+    \"cmd\": \"/usr/bin/chronos --http_port 8080 --master zk://master0.$CLUSTER_NAME.$ROOT_DOMAIN:2181,master1.$CLUSTER_NAME.$ROOT_DOMAIN:2181,master2.$CLUSTER_NAME.$ROOT_DOMAIN:2181/$CLUSTER_NAME --zk_hosts master0.$CLUSTER_NAME.$ROOT_DOMAIN:2181,master1.$CLUSTER_NAME.$ROOT_DOMAIN:2181,master2.$CLUSTER_NAME.$ROOT_DOMAIN:2181 --cluster_name chronos --hostname '$(hostname -i)'\",
     \"container\": {
         \"type\": \"DOCKER\",
         \"docker\": {
