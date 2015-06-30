@@ -1,0 +1,34 @@
+{
+    \"id\": \"/ambariserver\",
+    \"instances\": $NUM_INSTANCES,
+    \"cpus\": $CPUS,
+    \"mem\": $MEM,
+    \"shell\": \"false\",
+    \"cmd\": \"/scripts/bootstrap.sh server\",
+    \"container\": {
+        \"type\": \"DOCKER\",
+        \"docker\": {
+            \"image\": \"dockerhub.razerdata.com/razer/ambari:2.0.0\",
+	    \"privileged\": true,
+            \"network\": \"BRIDGE\",
+            \"portMappings\": [
+                {
+                    \"containerPort\": 8080,
+                    \"hostPort\": 0,
+                    \"protocol\": \"tcp\"
+                }
+            ]
+        }
+    },
+    \"healthChecks\": [
+    {
+        \"portIndex\": 0,
+        \"protocol\": \"TCP\",
+        \"gracePeriodSeconds\": 300,
+        \"intervalSeconds\": 60,
+        \"timeoutSeconds\": 20,
+        \"maxConsecutiveFailures\": 3,
+        \"ignoreHttp1xx\": false
+    }
+    ]
+}

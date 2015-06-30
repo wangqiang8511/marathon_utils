@@ -11,4 +11,10 @@ Deploy app in marathon
 
 # Create a zk_web.
 ./create_app.sh templates/zk_web/zk_web.json.tmpl
+
+# Create ambari hadoop cluster in mesos marathon.
+CPUS=1 MEM=4096 ./create_app.sh templates/ambari/ambari_server.json.tmpl 
+NUM_INSTANCES=3 CPUS=0.5 MEM=4096 AMBARI_SERVER=10.244.95.72 ./create_app.sh templates/ambari/ambari_agent.json.tmpl
 ```
+
+For ambari cluster. [See here for introduction](https://github.com/wangqiang8511/docker-ambari).
