@@ -1,18 +1,25 @@
 {
-    \"id\": \"/chronos\",
+    \"id\": \"/pridictionio-eventserver\",
     \"instances\": $NUM_INSTANCES,
     \"cpus\": $CPUS,
     \"mem\": $MEM,
     \"shell\": \"false\",
-    \"cmd\": \"/usr/bin/chronos --http_port 8080 --master zk://master0.$CLUSTER_NAME.$ROOT_DOMAIN:2181,master1.$CLUSTER_NAME.$ROOT_DOMAIN:2181,master2.$CLUSTER_NAME.$ROOT_DOMAIN:2181/$CLUSTER_NAME --zk_hosts master0.$CLUSTER_NAME.$ROOT_DOMAIN:2181,master1.$CLUSTER_NAME.$ROOT_DOMAIN:2181,master2.$CLUSTER_NAME.$ROOT_DOMAIN:2181 --cluster_name chronos --hostname '$(hostname -i)'\",
+    \"args\": [\"eventserver\"],
     \"container\": {
         \"type\": \"DOCKER\",
         \"docker\": {
-            \"image\": \"mesosphere/chronos:chronos-2.3.3-1.0.1.ubuntu1404-mesos-0.22.0-1.0.ubuntu1404\",
+            \"image\": \"dockerhub.razerdata.com/razer/predictionio:0.0.2\",
             \"network\": \"BRIDGE\",
+	    \"parameters\": [
+		 {\"key\": \"env\", \"value\": \"ES_NAME=$ES_NAME\"},
+		 {\"key\": \"env\", \"value\": \"ES_HOST=$ES_HOST\"},
+		 {\"key\": \"env\", \"value\": \"ES_T_PORT=$ES_T_PORT\"},
+		 {\"key\": \"env\", \"value\": \"ZOOKEEPER_HOSTS=$ZOOKEEPER_HOSTS\"},
+		 {\"key\": \"env\", \"value\": \"NAMENODE=$NAMENODE\"}
+	    ],
             \"portMappings\": [
                 {
-                    \"containerPort\": 8080,
+                    \"containerPort\": 7070,
                     \"hostPort\": 0,
                     \"protocol\": \"tcp\"
                 }
@@ -21,9 +28,8 @@
     },
     \"healthChecks\": [
     {
-        \"path\": \"/\",
         \"portIndex\": 0,
-        \"protocol\": \"HTTP\",
+        \"protocol\": \"TCP\",
         \"gracePeriodSeconds\": 300,
         \"intervalSeconds\": 60,
         \"timeoutSeconds\": 20,
