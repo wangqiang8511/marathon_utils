@@ -4,11 +4,11 @@
     \"cpus\": $CPUS,
     \"mem\": $MEM,
     \"shell\": \"false\",
-    \"cmd\": \"/usr/bin/chronos --http_port 8080 --master zk://master0.$CLUSTER_NAME.$ROOT_DOMAIN:2181,master1.$CLUSTER_NAME.$ROOT_DOMAIN:2181,master2.$CLUSTER_NAME.$ROOT_DOMAIN:2181/$CLUSTER_NAME --zk_hosts master0.$CLUSTER_NAME.$ROOT_DOMAIN:2181,master1.$CLUSTER_NAME.$ROOT_DOMAIN:2181,master2.$CLUSTER_NAME.$ROOT_DOMAIN:2181 --cluster_name chronos --hostname '$(hostname -i)'\",
+    \"cmd\": \"/usr/bin/chronos run_jar --http_port 8080 --master zk://master0.$CLUSTER_NAME.$ROOT_DOMAIN:2181,master1.$CLUSTER_NAME.$ROOT_DOMAIN:2181,master2.$CLUSTER_NAME.$ROOT_DOMAIN:2181/$CLUSTER_NAME --zk_hosts master0.$CLUSTER_NAME.$ROOT_DOMAIN:2181,master1.$CLUSTER_NAME.$ROOT_DOMAIN:2181,master2.$CLUSTER_NAME.$ROOT_DOMAIN:2181 --cluster_name chronos --hostname '$(hostname -i)'\",
     \"container\": {
         \"type\": \"DOCKER\",
         \"docker\": {
-            \"image\": \"mesosphere/chronos:chronos-2.3.3-1.0.1.ubuntu1404-mesos-0.22.0-1.0.ubuntu1404\",
+            \"image\": \"mesosphere/chronos:chronos-2.3.3-1.0.1.ubuntu1404-mesos-0.22.1-1.0.ubuntu1404\",
             \"network\": \"BRIDGE\",
             \"portMappings\": [
                 {
