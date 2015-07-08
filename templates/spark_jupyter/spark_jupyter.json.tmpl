@@ -1,0 +1,39 @@
+{
+    \"id\": \"/sparkjupyter\",
+    \"instances\": $NUM_INSTANCES,
+    \"cpus\": $CPUS,
+    \"mem\": $MEM,
+    \"shell\": \"false\",
+    \"args\": [\"/opt/spark/bin/pyspark\"],
+    \"container\": {
+        \"type\": \"DOCKER\",
+        \"docker\": {
+            \"image\": \"dockerhub.razerdata.com/razer/sparkmesos:1.0.0\",
+            \"network\": \"BRIDGE\",
+	    \"parameters\": [
+		 {\"key\": \"env\", \"value\": \"SPARK_MASTER=$SPARK_MASTER\"},
+		 {\"key\": \"env\", \"value\": \"SPARK_IMAGE=dockerhub.razerdata.com/razer/sparkmesos:1.0.0\"},
+		 {\"key\": \"env\", \"value\": \"PYSPARK_DRIVER_PYTHON=ipython2\"},
+		 {\"key\": \"env\", \"value\": \"PYSPARK_DRIVER_PYTHON_OPTS=notebook --ip=\'*\'\"}
+	    ],
+            \"portMappings\": [
+                {
+                    \"containerPort\": 8888,
+                    \"hostPort\": 0,
+                    \"protocol\": \"tcp\"
+                }
+            ]
+        }
+    },
+    \"healthChecks\": [
+    {
+        \"portIndex\": 0,
+        \"protocol\": \"TCP\",
+        \"gracePeriodSeconds\": 300,
+        \"intervalSeconds\": 60,
+        \"timeoutSeconds\": 20,
+        \"maxConsecutiveFailures\": 3,
+        \"ignoreHttp1xx\": false
+    }
+    ]
+}
