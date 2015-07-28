@@ -4,15 +4,15 @@
     \"cpus\": $CPUS,
     \"mem\": $MEM,
     \"shell\": \"false\",
-    \"args\": [\"/opt/spark/bin/pyspark\"],
+    \"args\": [\"sh\", \"-c\", \"/opt/spark/bin/pyspark\"],
     \"container\": {
         \"type\": \"DOCKER\",
         \"docker\": {
-            \"image\": \"dockerhub.razerdata.com/razer/sparkmesos:1.0.0\",
+            \"image\": \"dockerhub.razerdata.com/razer/sparkmesos:1.0.3\",
             \"network\": \"BRIDGE\",
 	    \"parameters\": [
 		 {\"key\": \"env\", \"value\": \"SPARK_MASTER=$SPARK_MASTER\"},
-		 {\"key\": \"env\", \"value\": \"SPARK_IMAGE=dockerhub.razerdata.com/razer/sparkmesos:1.0.0\"},
+		 {\"key\": \"env\", \"value\": \"SPARK_IMAGE=dockerhub.razerdata.com/razer/sparkmesos:1.0.3\"},
 		 {\"key\": \"env\", \"value\": \"PYSPARK_DRIVER_PYTHON=ipython2\"},
 		 {\"key\": \"env\", \"value\": \"PYSPARK_DRIVER_PYTHON_OPTS=notebook --ip=\'*\'\"}
 	    ],
