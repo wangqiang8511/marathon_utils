@@ -1,1 +1,15 @@
-test.sh
+local
+man
+lib
+lib64
+var
+bin
+include
+.ropeproject
+pip-selfcheck.json
+*.pyc
+*.swp
+bid.yaml
+celery.yaml
+rmfile
+rmlater
