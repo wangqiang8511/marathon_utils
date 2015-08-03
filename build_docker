@@ -1,3 +1,0 @@
-VERSION=$(cat VERSION)
-docker build $@ -t marathonutils .
-docker tag -f marathonutils:latest marathonutils:$VERSION

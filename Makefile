@@ -1,6 +1,10 @@
+include VERSION
+
 all: buildenv ensure_dir
 
 test: buildenv buildenvtest runtest
+
+install: ensure_dir buildenv
 
 buildenv:
 	virtualenv .
@@ -12,16 +16,13 @@ buildenvtest:
 runtest:
 	bin/nosetests -s
 
-install: 
-	pip install -r requirements.txt
-
 ensure_dir:
 	mkdir -p var/log
 	mkdir -p var/run
 	chmod -R a+w var
 
 docker: 
-	./build_docker
+	docker build -t $(REPO):$(VERSION) .
 
 clean:
 	rm -rf lib lib64 bin share include man var
