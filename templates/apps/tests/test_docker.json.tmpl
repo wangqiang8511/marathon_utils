@@ -1,0 +1,13 @@
+{
+    "id": "/example",
+    "instances": {{ instances|default(1) }},
+    "cpus": {{ cpus|default(0.1) }},
+    "mem": "{{ mem|default("512m") }}",
+    "shell": "false",
+    "cmd": "",
+    "container": 
+    {% include "misc/containers/docker.json.tmpl" %},
+    "healthChecks": [
+    {% include "misc/healthchecks/http_check.json.tmpl" %}
+    ]
+}

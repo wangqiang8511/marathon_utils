@@ -1,0 +1,22 @@
+{%- set docker_image = "goodguide/zk-web" -%}
+{%- set docker_ports = [
+{
+    "containerPort": 8080,
+    "hostPort": 0,
+    "protocol": "tcp"
+}
+] -%}
+
+{
+    "id": "/zkweb",
+    "instances": {{ instances|default(1) }},
+    "cpus": {{ cpus|default(0.1) }},
+    "mem": {{ mem|default(512) }},
+    "shell": "false",
+    "cmd": "",
+    "container": 
+    {% include "misc/containers/docker.json.tmpl" %},
+    "healthChecks": [
+    {% include "misc/healthchecks/http_check.json.tmpl" %}
+    ]
+}

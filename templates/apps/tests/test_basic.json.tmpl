@@ -1,0 +1,22 @@
+{
+    "id": "/zkweb",
+    "instances": {{ instances|default(1) }},
+    "cpus": 0.1,
+    "mem": 512,
+    "shell": "false",
+    "cmd": "",
+    "container": {
+        "type": "DOCKER",
+        "docker": {
+            "image": "goodguide/zk-web",
+            "network": "BRIDGE",
+            "portMappings": [
+                {
+                    "containerPort": 8080,
+                    "hostPort": 0,
+                    "protocol": "tcp"
+                }
+            ]
+        }
+    }
+}
