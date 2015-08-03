@@ -13,3 +13,4 @@ bid.yaml
 celery.yaml
 rmfile
 rmlater
+hack/set-default.sh
