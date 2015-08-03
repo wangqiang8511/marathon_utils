@@ -59,9 +59,9 @@ def list_apps(args):
     return True
 
 
-def more_to_context(more):
+def config_to_context(config):
     try:
-        d = json.loads(more)
+        d = json.loads(config)
         if not d:
             d = {}
     except:
@@ -73,12 +73,22 @@ def load_tempate(name, context):
     return render_template(name, context)
 
 
+def create_app(args):
+    context = {}
+    context["instances"] = args.instances
+    context["cpus"] = args.cpus
+    context["mem"] = args.mem
+    config = config_to_context(args.config)
+    context.update(config)
+    return post_app(load_tempate(args.name, context))
+
+
 def perform_action(args):
     action = args.action.lower()
     if action not in ["create", "delete", "list"]:
         return False
     if action == "create":
-        return post_app(load_tempate(args.name, more_to_context(args.more)))
+        return create_app(args)
     if action == "delete":
         return delete_app(args)
     if action == "list":
@@ -93,7 +103,13 @@ def main():
                         required=True, help="action create|delete|list")
     parser.add_argument("-n", "--name", default="all",
                         help="name of tempate/app")
-    parser.add_argument("-m", "--more", default="", help="more options")
+    parser.add_argument("-i", "--instances", default=1,
+                        help="number of instances")
+    parser.add_argument("-u", "--cpus", default="0.1",
+                        help="cpu usage")
+    parser.add_argument("-m", "--mem", default="512",
+                        help="memory usage")
+    parser.add_argument("-c", "--config", default="", help="more configs")
     args = parser.parse_args(sys.argv[1:])
     if perform_action(args):
         sys.exit(0)
