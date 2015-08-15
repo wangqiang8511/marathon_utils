@@ -33,3 +33,19 @@ hack/marathon_utils.sh -a create -n apps/zk_web/zk_web.json.tmpl
 # Delete an app
 hack/marathon_utils.sh -a delete -n /zkweb
 ```
+
+# Predefined Supported Apps
+
+* ZKWEB: web interface for zookeeper
+
+```
+hack/marathon_utils.sh -a create -n apps/zk_web/zk_web.json.tmpl
+```
+
+
+* HDFS
+
+```
+hack/marathon_utils.sh -a create -n apps/hdfs/hdfs_group.json.tmpl -i 4 -m 2048
+```
+TODO: Currently, master hostname and hostname constrain is hard code. Need to be configurable.

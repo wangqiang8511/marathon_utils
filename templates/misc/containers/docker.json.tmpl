@@ -27,15 +27,6 @@
         {%- endif %}
         {%- endfor %}
         ],
-        "volumes": [
-        {%- for v in docker_volumes %}
-        {%- if not loop.last %}
-        { "containerPath": "{{ v.containerPath }}", "hostPath": "{{ v.hostPath }}", "mode": "{{ v.mode|default("ro")}}" },
-        {% else %}
-        { "containerPath": "{{ v.containerPath }}", "hostPath": "{{ v.hostPath }}", "mode": "{{ v.mode|default("ro")}}" }
-        {%- endif %}
-        {%- endfor %}
-        ],
         "parameters": [
         {%- for p in docker_parameters %}
         {%- if not loop.last %}
@@ -45,5 +36,14 @@
         {%- endif %}
         {%- endfor %}
         ]
-    }
+    },
+    "volumes": [
+    {%- for v in docker_volumes %}
+    {%- if not loop.last %}
+    { "containerPath": "{{ v.containerPath }}", "hostPath": "{{ v.hostPath }}", "mode": "{{ v.mode|default("ro")}}" },
+    {% else %}
+    { "containerPath": "{{ v.containerPath }}", "hostPath": "{{ v.hostPath }}", "mode": "{{ v.mode|default("ro")}}" }
+    {%- endif %}
+    {%- endfor %}
+    ]
 }

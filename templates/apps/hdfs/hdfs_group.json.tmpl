@@ -1,0 +1,19 @@
+{%- set docker_image = "dockerhub.razerdata.com/razer/hdfs-2.4.1:0.0.1" -%}
+{%- set docker_network = "HOST" -%}
+{%- set worker_instances = instances -%}
+{
+    "id": "/hdfs",
+    "groups": [
+        {
+	    "id": "production",
+	    "apps": [
+	        {%- set instances = 1 -%}
+                {% include "apps/hdfs/hdfs_namenode.json.tmpl" %},
+	        {%- set instances = 1 -%}
+                {% include "apps/hdfs/hdfs_secondarynamenode.json.tmpl" %},
+	        {%- set instances = worker_instances -%}
+                {% include "apps/hdfs/hdfs_datanode.json.tmpl" %}
+	    ]
+	}
+    ]
+}

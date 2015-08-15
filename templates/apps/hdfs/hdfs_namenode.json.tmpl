@@ -1,0 +1,20 @@
+{%- set docker_image = "dockerhub.razerdata.com/razer/hdfs-2.4.1:0.0.1" -%}
+{%- set docker_network = "HOST" -%}
+{%- set docker_parameters = [
+    {"key": "env", "value": "MASTER=stable0.mes0.razerdata.com"},
+] -%}
+{
+    "id": "/hdfs/production/namenode",
+	    "instances": {{ instances|default(1) }},
+    "cpus": {{ cpus|default(0.1) }},
+    "mem": {{ mem|default(1024) }},
+    "shell": "false",
+    "args": ["hdfs", "namenode"],
+    "constraints": [["hostname", "LIKE", "stable0.*"]],
+    "ports": [0],
+    "container": 
+    {% include "misc/containers/docker.json.tmpl" %},
+    "healthChecks": [
+    {% include "misc/healthchecks/http_check.json.tmpl" %}
+    ]
+}

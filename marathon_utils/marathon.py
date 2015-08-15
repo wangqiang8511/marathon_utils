@@ -11,11 +11,14 @@ marathon_master = os.environ.get("MARATHON_MASTER", "http://localhost:8080")
 
 
 def post_app(app_json_data):
-    print app_json_data
+    data = json.loads(app_json_data)
+    print json.dumps(data, indent=4)
     headers = {}
     headers["Content-Type"] = "application/json"
     headers["Accept"] = "application/json"
     url = "%s/v2/apps" % marathon_master
+    if "groups" in data.keys():
+        url = "%s/v2/groups" % marathon_master
     r = requests.post(url, data=app_json_data, headers=headers)
     if r.status_code >= 400:
         print "something goes wrong"
