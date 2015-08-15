@@ -1,16 +1,18 @@
-{%- set docker_image = "dockerhub.razerdata.com/razer/hbase-1.0.0:0.0.1" -%}
-{%- set docker_network = "HOST" -%}
-{%- set hdfs_root_dir = "hdfs://stable0.mes0.razerdata.com:50030/hbase" -%}
-{%- set zookeeper_hosts = "master0.mes0.razerdata.com,master1.mes0.razerdata.com,master2.mes0.razerdata.com" -%}
+{%- set docker_image = docker_image or "dockerhub.razerdata.com/razer/hbase-1.0.0:0.0.1" -%}
+{%- set docker_network = docker_network or "HOST" -%}
+{%- set group_name = group_name or "production" -%}
+{%- set regionserver_selector = regionserver_selector or "stable.*" -%}
+{%- set hdfs_root_dir = hdfs_root_dir or "hdfs://stable0.mes0.razerdata.com:50030/hbase" -%}
+{%- set zookeeper_hosts = zookeeper_hosts or "master0.mes0.razerdata.com,master1.mes0.razerdata.com,master2.mes0.razerdata.com" -%}
 {
-    "id": "/hbase/production/regionserver",
+    "id": "/hbase/{{ group_name }}/regionserver",
 	    "instances": {{ instances|default(1) }},
     "cpus": {{ cpus|default(0.1) }},
     "mem": {{ mem|default(1024) }},
     "shell": "false",
     "cmd": "/hbase/bin/hbase regionserver -Dhbase.regionserver.info.port=$PORT0 -Dhbase.cluster.distributed='true' -Dhbase.rootdir={{ hdfs_root_dir }} -Dhbase.zookeeper.quorum={{ zookeeper_hosts }} start",
-    "constraints": [["hostname", "UNIQUE"], ["hostname", "LIKE", "stable.*"]],
-    "dependencies": ["/hbase/production/master"],
+    "constraints": [["hostname", "UNIQUE"], ["hostname", "LIKE", "{{ regionserver_selector }}"]],
+    "dependencies": ["/hbase/{{ group_name }}/master"],
     "container": 
     {% include "misc/containers/docker.json.tmpl" %},
     "healthChecks": [

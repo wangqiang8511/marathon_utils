@@ -1,15 +1,20 @@
-{%- set docker_image = "dockerhub.razerdata.com/razer/hdfs-2.4.1:0.0.1" -%}
-{%- set docker_network = "HOST" -%}
-{%- set docker_parameters = [{"key": "env", "value": "MASTER=stable0.mes0.razerdata.com"}] -%}
+{%- set docker_image = docker_image or "dockerhub.razerdata.com/razer/hdfs-2.4.1:0.0.1" -%}
+{%- set docker_network = docker_network or "HOST" -%}
+{%- set group_name = group_name or "production" -%}
+{%- set master = master or "stable0.mes0.razerdata.com" -%}
+{%- set datanode_selector = datanode_selector or "stable.*" -%}
+{%- set docker_parameters = docker_parameters or [
+    {"key": "env", "value": "MASTER=%s" % master},
+] -%}
 {
-    "id": "/hdfs/production/datanode",
+    "id": "/hdfs/{{ group_name }}/datanode",
     "instances": {{ instances|default(1) }},
     "cpus": {{ cpus|default(0.1) }},
     "mem": {{ mem|default(1024) }},
     "shell": "false",
     "args": ["hdfs", "datanode"],
-    "constraints": [["hostname", "UNIQUE"], ["hostname", "LIKE", "stable.*"]],
-    "dependencies": ["/hdfs/production/namenode", "/hdfs/production/secondarynamenode"],
+    "constraints": [["hostname", "UNIQUE"], ["hostname", "LIKE", "{{ datanode_selector }}"]],
+    "dependencies": ["/hdfs/{{ group_name }}/namenode", "/hdfs/{{ group_name }}/secondarynamenode"],
     "container": 
     {% include "misc/containers/docker.json.tmpl" %},
     "healthChecks": [

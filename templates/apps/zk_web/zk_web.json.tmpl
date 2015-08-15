@@ -1,4 +1,4 @@
-{%- set docker_image = "goodguide/zk-web" -%}
+{%- set docker_image = docker_image or "goodguide/zk-web" -%}
 {%- set docker_ports = [
 {
     "containerPort": 8080,
