@@ -48,4 +48,9 @@ hack/marathon_utils.sh -a create -n apps/zk_web/zk_web.json.tmpl
 ```
 hack/marathon_utils.sh -a create -n apps/hdfs/hdfs_group.json.tmpl -i 4 -m 2048
 ```
-TODO: Currently, master hostname and hostname constrain is hard code. Need to be configurable.
+
+* HBASE
+
+```
+hack/marathon_utils.sh -a create -n apps/hbase/hbase_group.json.tmpl -i 4 -m 2048
+```

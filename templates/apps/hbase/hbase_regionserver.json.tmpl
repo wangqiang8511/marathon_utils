@@ -1,0 +1,19 @@
+{%- set docker_image = "dockerhub.razerdata.com/razer/hbase-1.0.0:0.0.1" -%}
+{%- set docker_network = "HOST" -%}
+{%- set hdfs_root_dir = "hdfs://stable0.mes0.razerdata.com:50030/hbase" -%}
+{%- set zookeeper_hosts = "master0.mes0.razerdata.com,master1.mes0.razerdata.com,master2.mes0.razerdata.com" -%}
+{
+    "id": "/hbase/production/regionserver",
+	    "instances": {{ instances|default(1) }},
+    "cpus": {{ cpus|default(0.1) }},
+    "mem": {{ mem|default(1024) }},
+    "shell": "false",
+    "cmd": "/hbase/bin/hbase regionserver -Dhbase.regionserver.info.port=$PORT0 -Dhbase.cluster.distributed='true' -Dhbase.rootdir={{ hdfs_root_dir }} -Dhbase.zookeeper.quorum={{ zookeeper_hosts }} start",
+    "constraints": [["hostname", "UNIQUE"], ["hostname", "LIKE", "stable.*"]],
+    "dependencies": ["/hbase/production/master"],
+    "container": 
+    {% include "misc/containers/docker.json.tmpl" %},
+    "healthChecks": [
+    {% include "misc/healthchecks/http_check.json.tmpl" %}
+    ]
+}

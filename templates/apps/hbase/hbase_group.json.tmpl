@@ -1,0 +1,17 @@
+{%- set docker_image = "dockerhub.razerdata.com/razer/hbase-1.0.0:0.0.1" -%}
+{%- set docker_network = "HOST" -%}
+{%- set worker_instances = instances -%}
+{
+    "id": "/hbase",
+    "groups": [
+        {
+	    "id": "production",
+	    "apps": [
+	        {%- set instances = 1 -%}
+                {% include "apps/hbase/hbase_master.json.tmpl" %},
+	        {%- set instances = worker_instances -%}
+                {% include "apps/hbase/hbase_regionserver.json.tmpl" %}
+	    ]
+	}
+    ]
+}
