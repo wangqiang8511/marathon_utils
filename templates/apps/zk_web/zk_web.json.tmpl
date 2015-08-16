@@ -1,4 +1,5 @@
 {%- set docker_image = docker_image or "goodguide/zk-web" -%}
+{%- set app_name = app_name or "/zkweb" -%}
 {%- set docker_ports = [
 {
     "containerPort": 8080,
@@ -6,9 +7,8 @@
     "protocol": "tcp"
 }
 ] -%}
-
 {
-    "id": "/zkweb",
+    "id": "{{ app_name }}",
     "instances": {{ instances|default(1) }},
     "cpus": {{ cpus|default(0.1) }},
     "mem": {{ mem|default(512) }},

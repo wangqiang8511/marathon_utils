@@ -1,5 +1,5 @@
 {%- set docker_image = docker_image or "mesosphere/chronos:chronos-2.3.4-1.0.81.ubuntu1404-mesos-0.22.1-1.0.ubuntu1404" -%}
-{%- set app_name = app_name or "chronos" -%}
+{%- set app_name = app_name or "/chronos" -%}
 {%- set zookeeper_hosts = zookeeper_hosts or "master0.mes0.razerdata.com:2181,master1.mes0.razerdata.com:2181,master2.mes0.razerdata.com:2181" -%}
 {%- set master_uri = master_uri or "zk://%s/%s" % (zookeeper_hosts, app_name) -%}
 {%- set chronos_selector = chronos_selector or "master.*" -%}

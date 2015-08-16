@@ -40,9 +40,9 @@
     "volumes": [
     {%- for v in docker_volumes %}
     {%- if not loop.last %}
-    { "containerPath": "{{ v.containerPath }}", "hostPath": "{{ v.hostPath }}", "mode": "{{ v.mode|default("ro")}}" },
+    { "containerPath": "{{ v.containerPath }}", "hostPath": "{{ v.hostPath }}", "mode": "{{ v.mode|default("RO")}}" },
     {% else %}
-    { "containerPath": "{{ v.containerPath }}", "hostPath": "{{ v.hostPath }}", "mode": "{{ v.mode|default("ro")}}" }
+    { "containerPath": "{{ v.containerPath }}", "hostPath": "{{ v.hostPath }}", "mode": "{{ v.mode|default("RO")}}" }
     {%- endif %}
     {%- endfor %}
     ]

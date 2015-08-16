@@ -1,5 +1,5 @@
 {%- set docker_image = docker_image or "dockerhub.razerdata.com/razer/sparkmesos:1.0.3" -%}
-{%- set app_name = app_name or "sparkjupyter" -%}
+{%- set app_name = app_name or "/sparkjupyter" -%}
 {%- set sparkjupyter_selector = sparkjupyter_selector or "master.*" -%}
 {%- set spark_master = spark_master or "mesos://zk://master0.mes0.razerdata.com:2181,master1.mes0.razerdata.com:2181,master2.mes0.razerdata.com:2181/mes0" -%}
 {%- set more_conf = more_conf or "" -%}
