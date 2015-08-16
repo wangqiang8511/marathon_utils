@@ -61,3 +61,10 @@ hack/marathon_utils.sh -a create -n apps/hbase/hbase_group.json.tmpl -i 4 -m 204
 hack/marathon_utils.sh -a create -n apps/spark_jupyter/spark_jupyter.json.tmpl \
   -c '{"app_name": "sparkjupytertest", "more_conf": "--driver-memory 1g --conf spark.executor.memory=2g"}' 
 ```
+
+* Chronos: Distributed cron job manager.
+
+```
+hack/marathon_utils.sh -a create -n apps/chronos/chronos.json.tmpl \
+  -c '{"app_name": "chronosdev"}' -i 3 -m 768
+```
