@@ -68,3 +68,14 @@ hack/marathon_utils.sh -a create -n apps/spark_jupyter/spark_jupyter.json.tmpl \
 hack/marathon_utils.sh -a create -n apps/chronos/chronos.json.tmpl \
   -c '{"app_name": "chronosdev"}' -i 3 -m 768
 ```
+
+* etcd: A distributed consistent key-value store for shared configuration and service discovery
+
+
+```
+export CLUSTER_SIZE=3
+export DISCOVERTY=$(curl https://discovery.etcd.io/new?size=$CLUSTER_SIZE)
+hack/marathon_utils.sh -a create -n apps/etcd/etcd.json.tmpl \
+  -c '{"app_name": "etcdtest", "cluster_name": "etcdtest", "discovery": "'$DISCOVERTY'"}' \
+  -i $CLUSTER_SIZE -m 1024
+```

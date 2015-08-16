@@ -1,0 +1,27 @@
+{%- set docker_image = docker_image or "microbox/etcd:2.1.1" -%}
+{%- set docker_network = docker_network or "HOST" -%}
+{%- set app_name = app_name or "/etcd" -%}
+{%- set cluster_name = cluster_name or "etcd" -%}
+{%- set discovery = discovery or "http://etcd.razerdata.com:2379/v2/keys/discovery/%s" % cluster_name -%}
+{%- set docker_volumes = [
+{
+    "containerPath": "/etc/ssl",
+    "hostPath": "/etc/ssl"
+}
+] -%}
+{
+    "id": "{{ app_name }}",
+    "instances": {{ instances|default(1) }},
+    "cpus": {{ cpus|default(0.1) }},
+    "mem": {{ mem|default(512) }},
+    "shell": "false",
+    "ports": [0, 0],
+    "constraints": [["hostname", "UNIQUE"]],
+    "cmd": "/bin/etcd -name $(hostname) -initial-advertise-peer-urls http://$(hostname -i):$PORT1 -listen-peer-urls http://$(hostname -i):$PORT1 -listen-client-urls http://$(hostname -i):$PORT0 -advertise-client-urls http://$(hostname -i):$PORT0 -discovery {{ discovery }} --cors=* --data-dir=./$(hostname).etcd",
+    "container": 
+    {% include "misc/containers/docker.json.tmpl" %},
+    "healthChecks": [
+    {%- set check_url = "/version" -%}
+    {% include "misc/healthchecks/http_check.json.tmpl" %}
+    ]
+}
