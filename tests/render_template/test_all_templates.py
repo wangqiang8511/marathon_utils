@@ -19,8 +19,8 @@ def test_all_templates():
             if template_name.endswith("tmpl"):
                 try:
                     print template_name
-                    t = json.loads(
-                        render_template.render_template(template_name, {}))
+                    tr = render_template.render_template(template_name, {})
+                    t = json.loads(tr)
                     print json.dumps(t, indent=2)
                 except Exception as e:
                     assert False, "%s: %s" % (template_name, e)

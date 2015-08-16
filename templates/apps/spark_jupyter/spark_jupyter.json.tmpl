@@ -1,0 +1,32 @@
+{%- set docker_image = docker_image or "dockerhub.razerdata.com/razer/sparkmesos:1.0.3" -%}
+{%- set app_name = app_name or "sparkjupyter" -%}
+{%- set sparkjupyter_selector = sparkjupyter_selector or "master.*" -%}
+{%- set spark_master = spark_master or "mesos://zk://master0.mes0.razerdata.com:2181,master1.mes0.razerdata.com:2181,master2.mes0.razerdata.com:2181/mes0" -%}
+{%- set more_conf = more_conf or "" -%}
+{%- set docker_parameters = docker_parameters or [
+    {"key": "env", "value": "SPARK_MASTER=%s" % spark_master},
+    {"key": "env", "value": "SPARK_IMAGE=%s" % docker_image},
+    {"key": "env", "value": "PYSPARK_DRIVER_PYTHON=ipython2"},
+    {"key": "env", "value": "PYSPARK_DRIVER_PYTHON_OPTS=notebook --ip='*'"},
+] -%}
+{%- set docker_ports = [
+{
+    "containerPort": 8888,
+    "hostPort": 0,
+    "protocol": "tcp"
+}
+] -%}
+{
+    "id": "{{ app_name }}",
+    "instances": {{ instances|default(1) }},
+    "cpus": {{ cpus|default(0.1) }},
+    "mem": {{ mem|default(2048) }},
+    "constraints": [["hostname", "UNIQUE"], ["hostname", "LIKE", "{{ sparkjupyter_selector }}"]],
+    "shell": "false",
+    "args": ["sh", "-c", "/opt/spark/bin/pyspark {{ more_conf }}"],
+    "container": 
+    {% include "misc/containers/docker.json.tmpl" %},
+    "healthChecks": [
+    {% include "misc/healthchecks/http_check.json.tmpl" %}
+    ]
+}
