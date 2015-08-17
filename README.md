@@ -71,11 +71,26 @@ hack/marathon_utils.sh -a create -n apps/chronos/chronos.json.tmpl \
 
 * etcd: A distributed consistent key-value store for shared configuration and service discovery
 
-
 ```
 export CLUSTER_SIZE=3
 export DISCOVERTY=$(curl https://discovery.etcd.io/new?size=$CLUSTER_SIZE)
 hack/marathon_utils.sh -a create -n apps/etcd/etcd.json.tmpl \
   -c '{"app_name": "etcdtest", "cluster_name": "etcdtest", "discovery": "'$DISCOVERTY'"}' \
   -i $CLUSTER_SIZE -m 1024
+```
+
+* Elasticsearch
+
+```
+export ETCD_SERVER="http://your.etcd.com:2379"
+
+# Create es cluster without addtional client nodes.
+hack/marathon_utils.sh -a create -n apps/elasticsearch/es_group.json.tmpl \
+    -c '{"group_name": "estest", "es_cluster_name": "estest", "etcd_server": "'$ETCD_SERVER'"}' \
+    -i 3 -m 1024
+
+# Create es cluster with addtional client nodes.
+hack/marathon_utils.sh -a create -n apps/elasticsearch/es_group.json.tmpl \
+    -c '{"group_name": "estest", "es_cluster_name": "estest", "client_instances": 1, "etcd_server": "'$ETCD_SERVER'"}' \
+    -i 3 -m 1024
 ```

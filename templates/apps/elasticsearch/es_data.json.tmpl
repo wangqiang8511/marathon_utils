@@ -1,0 +1,31 @@
+{%- set docker_image = docker_image or "dockerhub.razerdata.com/razer/mesos_elasticsearch:1.5.2-2" -%}
+{%- set docker_network = docker_network or "BRIDGE" -%}
+{%- set group_name = group_name or "production" -%}
+{%- set es_data_selector = es_data_selector or "stable.*" -%}
+{%- set es_cluster_name = es_cluster_name or "estest" -%}
+{%- set etcd_server = etcd_server or "http://localhost:4001" -%}
+{%- set docker_ports = [
+{
+    "containerPort": 9200,
+    "hostPort": 0,
+    "protocol": "tcp"
+}
+] -%}
+{%- set docker_parameters = docker_parameters or [
+    {"key": "env", "value": "ES_CLUSTER_NAME=%s" % es_cluster_name},
+    {"key": "env", "value": "ETCD_SERVER=%s" % etcd_server},
+] -%}
+{
+    "id": "/elasticsearch/{{ group_name }}/esdata",
+    "instances": {{ instances|default(1) }},
+    "cpus": {{ cpus|default(0.1) }},
+    "mem": {{ mem|default(1024) }},
+    "shell": "false",
+    "cmd": "/run.sh",
+    "constraints": [["hostname", "UNIQUE"], ["hostname", "LIKE", "{{ es_data_selector }}"]],
+    "container": 
+    {% include "misc/containers/docker.json.tmpl" %},
+    "healthChecks": [
+    {% include "misc/healthchecks/http_check.json.tmpl" %}
+    ]
+}
