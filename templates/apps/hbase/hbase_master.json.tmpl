@@ -5,8 +5,8 @@
 {%- set hdfs_root_dir = hdfs_root_dir or "hdfs://stable0.mes0.razerdata.com:50030/hbase" -%}
 {%- set zookeeper_hosts = zookeeper_hosts or "master0.mes0.razerdata.com,master1.mes0.razerdata.com,master2.mes0.razerdata.com" -%}
 {
-"id": "/hbase/{{ group_name }}/master",
-	    "instances": {{ instances|default(1) }},
+    "id": "/hbase/{{ group_name }}/master",
+    "instances": {{ instances|default(1) }},
     "cpus": {{ cpus|default(0.1) }},
     "mem": {{ mem|default(1024) }},
     "shell": "false",

@@ -6,7 +6,7 @@
 {%- set zookeeper_hosts = zookeeper_hosts or "master0.mes0.razerdata.com,master1.mes0.razerdata.com,master2.mes0.razerdata.com" -%}
 {
     "id": "/hbase/{{ group_name }}/regionserver",
-	    "instances": {{ instances|default(1) }},
+    "instances": {{ instances|default(1) }},
     "cpus": {{ cpus|default(0.1) }},
     "mem": {{ mem|default(1024) }},
     "shell": "false",

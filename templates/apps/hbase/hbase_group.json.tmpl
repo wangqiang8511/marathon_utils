@@ -6,13 +6,13 @@
     "id": "/hbase",
     "groups": [
         {
-	"id": "{{ group_name }}",
-	    "apps": [
-	        {%- set instances = 1 -%}
-                {% include "apps/hbase/hbase_master.json.tmpl" %},
-	        {%- set instances = worker_instances -%}
-                {% include "apps/hbase/hbase_regionserver.json.tmpl" %}
-	    ]
-	}
+            "id": "{{ group_name }}",
+            "apps": [
+            {%- set instances = 1 -%}
+            {% include "apps/hbase/hbase_master.json.tmpl" %},
+            {%- set instances = worker_instances -%}
+            {% include "apps/hbase/hbase_regionserver.json.tmpl" %}
+            ]
+        }
     ]
 }
