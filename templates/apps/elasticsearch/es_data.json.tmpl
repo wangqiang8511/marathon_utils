@@ -9,6 +9,11 @@
     "containerPort": 9200,
     "hostPort": 0,
     "protocol": "tcp"
+}, 
+{
+    "containerPort": 9300,
+    "hostPort": 0,
+    "protocol": "tcp"
 }
 ] -%}
 {%- set docker_parameters = docker_parameters or [
@@ -22,6 +27,7 @@
     "mem": {{ mem|default(1024) }},
     "shell": "false",
     "cmd": "/run.sh",
+    "ports": [0, 0],
     "constraints": [["hostname", "UNIQUE"], ["hostname", "LIKE", "{{ es_data_selector }}"]],
     "container": 
     {% include "misc/containers/docker.json.tmpl" %},
