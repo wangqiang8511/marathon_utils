@@ -1,4 +1,4 @@
-{%- set docker_image = docker_image or "dockerhub.razerdata.com/razer/hbase-1.0.0:0.0.1" -%}
+{%- set docker_image = docker_image or "dockerhub.razerdata.com/razer/hbase-1.1.0:0.0.1" -%}
 {%- set docker_network = docker_network or "HOST" -%}
 {%- set group_name = group_name or "production" -%}
 {%- set worker_instances = worker_instances or instances -%}
@@ -8,7 +8,7 @@
         {
             "id": "{{ group_name }}",
             "apps": [
-            {%- set instances = 1 -%}
+            {%- set instances = 2 -%}
             {% include "apps/hbase/hbase_master.json.tmpl" %},
             {%- set instances = worker_instances -%}
             {% include "apps/hbase/hbase_regionserver.json.tmpl" %}
