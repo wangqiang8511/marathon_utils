@@ -2,6 +2,7 @@
 {%- set docker_network = docker_network or "HOST" -%}
 {%- set app_name = app_name or "/etcd" -%}
 {%- set cluster_name = cluster_name or "etcd" -%}
+{%- set etcd_selector = etcd_select or "stable.*" -%}
 {%- set discovery = discovery or "http://etcd.razerdata.com:2379/v2/keys/discovery/%s" % cluster_name -%}
 {%- set docker_volumes = [
 {
@@ -16,7 +17,7 @@
     "mem": {{ mem|default(512) }},
     "shell": "false",
     "ports": [0, 0],
-    "constraints": [["hostname", "UNIQUE"]],
+    "constraints": [["hostname", "UNIQUE"], ["hostname", "LIKE", "{{ etcd_selector }}"]],
     "cmd": "/bin/etcd -name $(hostname) -initial-advertise-peer-urls http://$(hostname -i):$PORT1 -listen-peer-urls http://$(hostname -i):$PORT1 -listen-client-urls http://$(hostname -i):$PORT0 -advertise-client-urls http://$(hostname -i):$PORT0 -discovery {{ discovery }} --cors=* --data-dir=./$(hostname).etcd",
     "container": 
     {% include "misc/containers/docker.json.tmpl" %},

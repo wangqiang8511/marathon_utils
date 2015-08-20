@@ -94,3 +94,27 @@ hack/marathon_utils.sh -a create -n apps/elasticsearch/es_group.json.tmpl \
     -c '{"group_name": "estest", "es_cluster_name": "estest", "client_instances": 1, "etcd_server": "'$ETCD_SERVER'"}' \
     -i 3 -m 1024
 ```
+
+* Hive server
+
+```
+hack/marathon_utils.sh -a create -n apps/hive/hive.json.tmpl -i 1 -m 2048
+```
+
+
+* Presto Cluster
+
+```
+# You need to sync your catalog config in etcd first. Or basic catalog will
+# applied
+
+export ETCD_SERVER="http://your.etcd.com:2379"
+hack/marathon_utils.sh -a create -n apps/presto/presto_group.json.tmpl \
+    -c '{"group_name": "test", "etcd_server": "'$ETCD_SERVER'"}' -i 3 -m 2048
+```
+
+* Mysql: For test purpose, we never suggest deploy mysql in mesos.
+
+```
+hack/marathon_utils.sh -a create -n apps/mysql/msyql.json.tmpl
+```
