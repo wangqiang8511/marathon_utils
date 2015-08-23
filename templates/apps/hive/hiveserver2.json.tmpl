@@ -1,0 +1,35 @@
+{%- set docker_image = docker_image or "dockerhub.razerdata.com/razer/hive-1.2.0-2.4.1:0.0.1" -%}
+{%- set group_name = group_name or "production" -%}
+{%- set hive_selector = hive_selector or "stable.*" -%}
+{%- set hdfs_url = hdfs_url or "hdfs://stable0.mes0.razerdata.com:50030" -%}
+{%- set hive_metastore_uris = hive_metastore_uris or "thrift://master0.mes0.razerdata.com:10017" -%}
+{%- set aws_secret_access_key = aws_secret_access_key or "" -%}
+{%- set aws_access_key_id = aws_access_key_id or "" -%}
+{%- set docker_ports = [
+{
+    "containerPort": 10000,
+    "hostPort": 0,
+    "protocol": "tcp",
+}
+] -%}
+{%- set docker_parameters = docker_parameters or [
+    {"key": "env", "value": "HDFS_URL=%s" % hdfs_url},
+    {"key": "env", "value": "HIVE_METASTORE_URIS=%s" % hive_metastore_uris},
+    {"key": "env", "value": "AWS_SECRET_ACCESS_KEY=%s" % aws_secret_access_key},
+    {"key": "env", "value": "AWS_ACCESS_KEY_ID=%s" % aws_access_key_id},
+] -%}
+{
+    "id": "/hive/{{ group_name }}/hiveserver2",
+    "instances": {{ instances|default(1) }},
+    "cpus": {{ cpus|default(0.1) }},
+    "mem": {{ mem|default(512) }},
+    "shell": "false",
+    "cmd": "/scripts/setup.sh /scripts/hiveserver2-bootstrap.sh",
+    "constraints": [["hostname", "LIKE", "{{ hive_selector }}"]],
+    "dependencies": ["/hive/{{ group_name }}/metastore"],
+    "container": 
+    {% include "misc/containers/docker.json.tmpl" %},
+    "healthChecks": [
+    {% include "misc/healthchecks/tcp_check.json.tmpl" %}
+    ]
+}

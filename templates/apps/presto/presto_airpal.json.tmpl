@@ -1,0 +1,40 @@
+{%- set docker_image = docker_image or "dockerhub.razerdata.com/razer/airpal:0.0.1" -%}
+{%- set app_name = app_name or "/airpal" -%}
+{%- set airpal_selector = airpal_selector or "stable.*" -%}
+{%- set db_user = db_user or "root" -%}
+{%- set db_pass = db_pass or "root" -%}
+{%- set db_jdbc_url = db_jdbc_url or "jdbc:mysql://master0.mes0.razerdata.com:10021/airpal" -%}
+{%- set presto_coordinator = presto_coordinator or "http://master0.mes0.razerdata.com:10019" -%}
+{%- set docker_ports = [
+{
+    "containerPort": 8081,
+    "hostPort": 0,
+    "protocol": "tcp"
+},
+{
+    "containerPort": 8082,
+    "hostPort": 0,
+    "protocol": "tcp"
+}
+] -%}
+{%- set docker_parameters = docker_parameters or [
+    {"key": "env", "value": "DB_USER=%s" % db_user},
+    {"key": "env", "value": "DB_PASS=%s" % db_pass},
+    {"key": "env", "value": "DB_JDBC_URL=%s" % db_jdbc_url},
+    {"key": "env", "value": "PRESTO_COORDINATOR=%s" % presto_coordinator},
+] -%}
+{
+    "id": "{{ app_name }}",
+    "instances": {{ instances|default(1) }},
+    "cpus": {{ cpus|default(0.1) }},
+    "mem": {{ mem|default(1024) }},
+    "shell": "false",
+    "ports": [0, 0],
+    "cmd": "/scripts/start_server.sh",
+    "constraints": [["hostname", "UNIQUE"], ["hostname", "LIKE", "{{ airpal_selector }}"]],
+    "container": 
+    {% include "misc/containers/docker.json.tmpl" %},
+    "healthChecks": [
+    {% include "misc/healthchecks/http_check.json.tmpl" %}
+    ]
+}

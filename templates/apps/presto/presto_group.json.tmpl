@@ -1,0 +1,20 @@
+{%- set docker_image = docker_image or "dockerhub.razerdata.com/razer/presto-0.115:0.0.1" -%}
+{%- set group_name = group_name or "production" -%}
+{%- set coordinator_selector = coordinator_selector or "stable.*" -%}
+{%- set etcd_server = etcd_server or "http://localhost:4001" -%}
+{%- set etcd_conf_prefix = etcd_conf_prefix or "/presto/conf/test" -%}
+{%- set worker_instances = worker_instances or instances -%}
+{
+    "id": "/presto",
+    "groups": [
+        {
+            "id": "{{ group_name }}",
+            "apps": [
+                {%- set instances = 1 -%}
+                {% include "apps/presto/presto_coordinator.json.tmpl" %},
+                {%- set instances = worker_instances -%}
+                {% include "apps/presto/presto_worker.json.tmpl" %}
+            ]
+         }
+    ]
+}

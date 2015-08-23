@@ -1,0 +1,28 @@
+{%- set docker_image = docker_image or "mysql" -%}
+{%- set app_name = app_name or "/mysql" -%}
+{%- set mysql_selector = mysql_selector or "stable.*" -%}
+{%- set mysql_root_pass = mysql_root_pass or "root" -%}
+{%- set docker_ports = [
+{
+    "containerPort": 3306,
+    "hostPort": 0,
+    "protocol": "tcp"
+}
+] -%}
+{%- set docker_parameters = docker_parameters or [
+    {"key": "env", "value": "MYSQL_ROOT_PASSWORD=%s" % mysql_root_pass},
+] -%}
+{
+    "id": "{{ app_name }}",
+    "instances": {{ instances|default(1) }},
+    "cpus": {{ cpus|default(0.1) }},
+    "mem": {{ mem|default(512) }},
+    "shell": "false",
+    "cmd": "",
+    "constraints": [["hostname", "LIKE", "{{ mysql_selector }}"]],
+    "container": 
+    {% include "misc/containers/docker.json.tmpl" %},
+    "healthChecks": [
+    {% include "misc/healthchecks/tcp_check.json.tmpl" %}
+    ]
+}

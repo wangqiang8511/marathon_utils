@@ -1,0 +1,32 @@
+{%- set docker_image = docker_image or "dockerhub.razerdata.com/razer/presto-0.115:0.0.1" -%}
+{%- set group_name = group_name or "production" -%}
+{%- set worker_selector = worker_selector or ".*" -%}
+{%- set etcd_server = etcd_server or "http://localhost:4001" -%}
+{%- set etcd_conf_prefix = etcd_conf_prefix or "/presto/conf/test" -%}
+{%- set docker_ports = [
+{
+    "containerPort": 8080,
+    "hostPort": 0,
+    "protocol": "tcp"
+}
+] -%}
+{%- set docker_parameters = docker_parameters or [
+    {"key": "env", "value": "CLUSTER_NAME=%s" % group_name},
+    {"key": "env", "value": "ETCD_SERVER=%s" % etcd_server},
+    {"key": "env", "value": "ETCD_CONF_PREFIX=%s" % etcd_conf_prefix},
+] -%}
+{
+    "id": "/presto/{{ group_name }}/worker",
+    "instances": {{ instances|default(1) }},
+    "cpus": {{ cpus|default(0.1) }},
+    "mem": {{ mem|default(512) }},
+    "shell": "false",
+    "cmd": "/scripts/setup.sh worker",
+    "constraints": [["hostname", "UNIQUE"], ["hostname", "LIKE", "{{ worker_selector }}"]],
+    "dependencies": ["/presto/{{ group_name }}/coordinator"],
+    "container": 
+    {% include "misc/containers/docker.json.tmpl" %},
+    "healthChecks": [
+    {% include "misc/healthchecks/tcp_check.json.tmpl" %}
+    ]
+}

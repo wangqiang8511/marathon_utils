@@ -1,0 +1,15 @@
+{%- set docker_image = docker_image or "dockerhub.razerdata.com/razer/hive-1.2.0-2.4.1:0.0.1" -%}
+{%- set group_name = group_name or "production" -%}
+{%- set hive_selector = hive_selector or "stable.*" -%}
+{
+    "id": "/hive",
+    "groups": [
+        {
+            "id": "{{ group_name }}",
+            "apps": [
+            {% include "apps/hive/metastore.json.tmpl" %},
+            {% include "apps/hive/hiveserver2.json.tmpl" %}
+            ]
+        }
+    ]
+}

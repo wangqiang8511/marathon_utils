@@ -98,7 +98,12 @@ hack/marathon_utils.sh -a create -n apps/elasticsearch/es_group.json.tmpl \
 * Hive server
 
 ```
-hack/marathon_utils.sh -a create -n apps/hive/hive.json.tmpl -i 1 -m 2048
+export AWS_ACCESS_KEY_ID="your_aws_access_key"
+export AWS_SECRET_ACCESS_KEY="your_aws_secret_key"
+hack/marathon_utils.sh -a create -n apps/hive/metastore.json.tmpl -i 1 -m 2048 \
+  -c '{"aws_access_key_id": "'$AWS_ACCESS_KEY_ID'", "aws_secret_access_key": "'$AWS_SECRET_ACCESS_KEY'"}'
+hack/marathon_utils.sh -a create -n apps/hive/hiveserver2.json.tmpl -i 1 -m 2048 \
+  -c '{"aws_access_key_id": "'$AWS_ACCESS_KEY_ID'", "aws_secret_access_key": "'$AWS_SECRET_ACCESS_KEY'"}'
 ```
 
 
@@ -111,6 +116,9 @@ hack/marathon_utils.sh -a create -n apps/hive/hive.json.tmpl -i 1 -m 2048
 export ETCD_SERVER="http://your.etcd.com:2379"
 hack/marathon_utils.sh -a create -n apps/presto/presto_group.json.tmpl \
     -c '{"group_name": "test", "etcd_server": "'$ETCD_SERVER'"}' -i 3 -m 2048
+
+# Start airpal web ui for presto.
+hack/marathon_utils.sh -a create -n apps/presto/presto_airpal.json.tmpl -m 2048
 ```
 
 * Mysql: For test purpose, we never suggest deploy mysql in mesos.
